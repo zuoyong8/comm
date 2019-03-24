@@ -24,26 +24,32 @@ MAIL_SUFFIX = {"bccto.me":1,
 				"juyouxi.com":19
 				}
 
+FILTER = "_update.csv"
+FILE_SUFFIX = ".csv"
 
 def csv_find_files():
 	all = os.listdir(".")
 	files = []
 	for a in all:
-		if a.find(".csv")>=0:
+		if (a.find(FILE_SUFFIX)>=0) and (a.find(FILTER) == -1):
 			files.append("./"+a)
 	return files
 
 def csv_write_files(read_files):
 	wfiles = []
 	for r in read_files:
-		i = r.find(".csv")
-		wfiles.append(r[:i] + "_update.csv")
+		index = r.find(FILE_SUFFIX)
+		if r.find(FILTER) == -1:
+			wfiles.append(r[:index] + FILTER)
 	return wfiles
 
 def csv_operation(read_files,write_files):
 	count = 0 
 	for index,rf in enumerate(read_files):
 		csv_rf = open(rf,"r")
+		# if (os.path.exists(write_files[index])):
+		# 	print(write_files[index])
+			# file.remove(write_files[index])
 		csv_wf = open(write_files[index],"w",newline = "")
 		csv_reader = csv.reader(csv_rf)
 		csv_writer = csv.writer(csv_wf)
@@ -78,5 +84,6 @@ def csv_check_invalid(read_files):
 if __name__ == "__main__":
 	cff = csv_find_files()
 	# print(csv_operation(fs,csv_write_files(fs)))
-	print(csv_check_invalid(cff))
+	print(csv_operation(cff,csv_write_files(cff)))
+		# print(csv_check_i)nvalid(cff))
 	# print(fs)
